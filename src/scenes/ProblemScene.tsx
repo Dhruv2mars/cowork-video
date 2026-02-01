@@ -35,28 +35,28 @@ export const ProblemScene: FC = () => {
           <WindowCard
             title="Docs"
             subtitle="Draft the narrative, align stakeholders, and refine tone."
-            delay={6}
+            delaySeconds={0.2}
             style={{top: 0, left: 40}}
             accent={colors.accent}
           />
           <WindowCard
             title="Slack"
             subtitle="Check updates, clarify asks, and unblock decisions."
-            delay={12}
+            delaySeconds={0.4}
             style={{top: 220, right: 0}}
             accent={colors.mint}
           />
           <WindowCard
             title="GitHub"
             subtitle="Review changes, track progress, and merge fast."
-            delay={18}
+            delaySeconds={0.6}
             style={{bottom: 0, left: 140}}
             accent={colors.accentDeep}
           />
           <WindowCard
             title="Notion"
             subtitle="Organize research, tasks, and project context."
-            delay={24}
+            delaySeconds={0.8}
             style={{top: 280, left: 0}}
             accent={colors.mintDeep}
           />

@@ -42,7 +42,7 @@ export const IntegrationsScene: FC = () => {
               key={integration.label}
               label={integration.label}
               color={integration.color}
-              delay={6 + index * 6}
+              delaySeconds={0.25 + index * 0.18}
             />
           ))}
         </div>

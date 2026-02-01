@@ -1,28 +1,35 @@
 import type {CSSProperties, FC} from 'react';
-import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors, radii, shadows} from '../design/theme';
 import {fonts, typeScale} from '../design/typography';
+import {springProgress} from '../utils/motion';
 
 type IntegrationPillProps = {
   label: string;
   color: string;
-  delay?: number;
+  delaySeconds?: number;
   style?: CSSProperties;
 };
 
 export const IntegrationPill: FC<IntegrationPillProps> = ({
   label,
   color,
-  delay = 0,
+  delaySeconds = 0,
   style,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
 
-  const progress = spring({frame: frame - delay, fps, config: {damping: 160}});
+  const progress = springProgress({
+    frame,
+    fps,
+    delaySeconds,
+    durationSeconds: 0.7,
+    config: {damping: 160},
+  });
   const opacity = interpolate(progress, [0, 1], [0, 1]);
-  const translateY = interpolate(progress, [0, 1], [20, 0]);
-  const scale = interpolate(progress, [0, 1], [0.94, 1]);
+  const translateY = interpolate(progress, [0, 1], [18, 0]);
+  const scale = interpolate(progress, [0, 1], [0.96, 1]);
 
   return (
     <div

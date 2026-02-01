@@ -28,7 +28,7 @@ export const OrchestrateScene: FC = () => {
             height: 620,
           }}
         >
-          <NodeGraph width={820} height={620} delay={6} />
+          <NodeGraph width={820} height={620} delaySeconds={0.25} />
         </div>
       </AbsoluteFill>
     </SceneShell>

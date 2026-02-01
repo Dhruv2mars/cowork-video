@@ -1,25 +1,32 @@
 import type {FC} from 'react';
-import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors, radii, shadows} from '../design/theme';
 import {fonts, typeScale} from '../design/typography';
+import {springProgress} from '../utils/motion';
 
 type EnvironmentFrameProps = {
   title: string;
   subtitle: string;
-  delay?: number;
+  delaySeconds?: number;
 };
 
 export const EnvironmentFrame: FC<EnvironmentFrameProps> = ({
   title,
   subtitle,
-  delay = 0,
+  delaySeconds = 0,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
 
-  const progress = spring({frame: frame - delay, fps, config: {damping: 180}});
+  const progress = springProgress({
+    frame,
+    fps,
+    delaySeconds,
+    durationSeconds: 0.8,
+    config: {damping: 180},
+  });
   const opacity = interpolate(progress, [0, 1], [0, 1]);
-  const translateY = interpolate(progress, [0, 1], [30, 0]);
+  const translateY = interpolate(progress, [0, 1], [22, 0]);
 
   return (
     <div

@@ -32,7 +32,7 @@ export const ApprovalScene: FC = () => {
               'Grant file access selectively',
               'Review outcomes before share',
             ]}
-            startDelay={8}
+            startDelaySeconds={0.3}
           />
         </div>
       </AbsoluteFill>

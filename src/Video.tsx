@@ -1,5 +1,5 @@
 import type {FC} from 'react';
-import {TransitionSeries, linearTiming} from '@remotion/transitions';
+import {TransitionSeries, springTiming} from '@remotion/transitions';
 import {fade} from '@remotion/transitions/fade';
 import {slide} from '@remotion/transitions/slide';
 import {wipe} from '@remotion/transitions/wipe';
@@ -15,7 +15,10 @@ import {ImpactScene} from './scenes/ImpactScene';
 import {CtaScene} from './scenes/CtaScene';
 import {TRANSITION_FRAMES, scenesInFrames} from './utils/timeline';
 
-const timing = linearTiming({durationInFrames: TRANSITION_FRAMES});
+const timing = springTiming({
+  durationInFrames: TRANSITION_FRAMES,
+  config: {damping: 200},
+});
 
 export const CoworkLaunchVideo: FC = () => {
   const workflowDuration = scenesInFrames.find(
