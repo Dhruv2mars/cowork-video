@@ -1,0 +1,25 @@
+{
+  "name": "cowork-video",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "remotion studio",
+    "render": "remotion render",
+    "preview": "remotion preview"
+  },
+  "dependencies": {
+    "@remotion/google-fonts": "latest",
+    "@remotion/media": "latest",
+    "@remotion/transitions": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "latest"
+  },
+  "devDependencies": {
+    "@remotion/cli": "latest",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "typescript": "^5.4.5"
+  }
+}
