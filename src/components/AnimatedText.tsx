@@ -1,29 +1,32 @@
 import type {CSSProperties, FC, ReactNode} from 'react';
-import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {springProgress} from '../utils/motion';
 
 type AnimatedTextProps = {
   children: ReactNode;
-  delay?: number;
+  delaySeconds?: number;
   style?: CSSProperties;
 };
 
 export const AnimatedText: FC<AnimatedTextProps> = ({
   children,
-  delay = 0,
+  delaySeconds = 0,
   style,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
 
-  const progress = spring({
-    frame: frame - delay,
+  const progress = springProgress({
+    frame,
     fps,
+    delaySeconds,
+    durationSeconds: 0.7,
     config: {damping: 200},
   });
 
   const opacity = interpolate(progress, [0, 1], [0, 1]);
-  const translateY = interpolate(progress, [0, 1], [24, 0]);
-  const blur = interpolate(progress, [0, 1], [12, 0]);
+  const translateY = interpolate(progress, [0, 1], [18, 0]);
+  const blur = interpolate(progress, [0, 1], [8, 0]);
 
   return (
     <div

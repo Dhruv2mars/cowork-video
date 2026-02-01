@@ -1,12 +1,13 @@
 import type {CSSProperties, FC} from 'react';
-import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors, radii, shadows} from '../design/theme';
 import {fonts, typeScale} from '../design/typography';
+import {springProgress} from '../utils/motion';
 
 type WindowCardProps = {
   title: string;
   subtitle: string;
-  delay?: number;
+  delaySeconds?: number;
   accent?: string;
   style?: CSSProperties;
 };
@@ -14,16 +15,22 @@ type WindowCardProps = {
 export const WindowCard: FC<WindowCardProps> = ({
   title,
   subtitle,
-  delay = 0,
+  delaySeconds = 0,
   accent = colors.accent,
   style,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const progress = spring({frame: frame - delay, fps, config: {damping: 180}});
+  const progress = springProgress({
+    frame,
+    fps,
+    delaySeconds,
+    durationSeconds: 0.8,
+    config: {damping: 180},
+  });
   const opacity = interpolate(progress, [0, 1], [0, 1]);
-  const translateY = interpolate(progress, [0, 1], [30, 0]);
-  const scale = interpolate(progress, [0, 1], [0.96, 1]);
+  const translateY = interpolate(progress, [0, 1], [24, 0]);
+  const scale = interpolate(progress, [0, 1], [0.97, 1]);
 
   return (
     <div

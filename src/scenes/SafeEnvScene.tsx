@@ -29,7 +29,7 @@ export const SafeEnvScene: FC = () => {
           <EnvironmentFrame
             title="Dedicated workspaces"
             subtitle="Each workflow runs in its own secure macOS VM with controlled access."
-            delay={6}
+            delaySeconds={0.25}
           />
         </div>
       </AbsoluteFill>

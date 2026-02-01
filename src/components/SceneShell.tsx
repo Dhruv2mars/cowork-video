@@ -1,7 +1,8 @@
 import type {FC, ReactNode} from 'react';
-import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors, gradients} from '../design/theme';
 import {fonts} from '../design/typography';
+import {floatOffset, springProgress} from '../utils/motion';
 
 type SceneShellProps = {
   variant?: 'light' | 'dark';
@@ -14,19 +15,21 @@ export const SceneShell: FC<SceneShellProps> = ({
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const drift = frame / fps;
 
   const glowShift = {
-    x: Math.sin(drift / 3) * 30,
-    y: Math.cos(drift / 4) * 24,
+    x: floatOffset(frame, fps, {amplitude: 26, periodSeconds: 7}),
+    y: floatOffset(frame, fps, {amplitude: 20, periodSeconds: 9, phaseSeconds: 0.8}),
   };
   const glowShiftTwo = {
-    x: Math.cos(drift / 5) * 40,
-    y: Math.sin(drift / 6) * 32,
+    x: floatOffset(frame, fps, {amplitude: 34, periodSeconds: 10, phaseSeconds: 1.3}),
+    y: floatOffset(frame, fps, {amplitude: 28, periodSeconds: 8, phaseSeconds: 0.4}),
   };
 
-  const baseOpacity = interpolate(frame, [0, 20], [0, 1], {
-    extrapolateRight: 'clamp',
+  const baseOpacity = springProgress({
+    frame,
+    fps,
+    durationSeconds: 0.7,
+    config: {damping: 200},
   });
 
   return (

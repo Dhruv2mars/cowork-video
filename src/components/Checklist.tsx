@@ -1,16 +1,17 @@
 import type {FC} from 'react';
-import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors, radii, shadows} from '../design/theme';
 import {fonts, typeScale} from '../design/typography';
+import {springProgress} from '../utils/motion';
 
 type ChecklistProps = {
   items: string[];
-  startDelay?: number;
+  startDelaySeconds?: number;
 };
 
 export const Checklist: FC<ChecklistProps> = ({
   items,
-  startDelay = 0,
+  startDelaySeconds = 0,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -29,15 +30,17 @@ export const Checklist: FC<ChecklistProps> = ({
       }}
     >
       {items.map((item, index) => {
-        const delay = startDelay + index * 12;
-        const progress = spring({
-          frame: frame - delay,
+        const delaySeconds = startDelaySeconds + index * 0.35;
+        const progress = springProgress({
+          frame,
           fps,
+          delaySeconds,
+          durationSeconds: 0.65,
           config: {damping: 200},
         });
         const opacity = interpolate(progress, [0, 1], [0, 1]);
-        const translateX = interpolate(progress, [0, 1], [20, 0]);
-        const scale = interpolate(progress, [0, 1], [0.8, 1]);
+        const translateX = interpolate(progress, [0, 1], [18, 0]);
+        const scale = interpolate(progress, [0, 1], [0.85, 1]);
 
         return (
           <div
@@ -47,7 +50,7 @@ export const Checklist: FC<ChecklistProps> = ({
               alignItems: 'center',
               gap: 16,
               opacity,
-              transform: `translateX(${translateX}px)` ,
+              transform: `translateX(${translateX}px)`,
             }}
           >
             <div

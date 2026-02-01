@@ -4,13 +4,28 @@ import {SceneShell} from '../components/SceneShell';
 import {TitleStack} from '../components/TitleStack';
 import {colors, layout, radii, shadows} from '../design/theme';
 import {fonts, typeScale} from '../design/typography';
+import {easeProgress, floatOffset, springProgress} from '../utils/motion';
 
 export const IntroScene: FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const floatY = Math.sin(frame / fps) * 12;
-  const ringOpacity = interpolate(frame, [0, 20], [0, 1], {
-    extrapolateRight: 'clamp',
+  const floatY = floatOffset(frame, fps, {
+    amplitude: 12,
+    periodSeconds: 6,
+    phaseSeconds: 0.6,
+  });
+  const ringOpacity = easeProgress({
+    frame,
+    fps,
+    delaySeconds: 0.1,
+    durationSeconds: 0.6,
+  });
+  const orbScale = springProgress({
+    frame,
+    fps,
+    delaySeconds: 0.05,
+    durationSeconds: 0.8,
+    config: {damping: 180},
   });
 
   return (
@@ -42,6 +57,7 @@ export const IntroScene: FC = () => {
             alignItems: 'center',
             justifyContent: 'center',
             transform: `translateY(${floatY}px)`,
+            opacity: interpolate(orbScale, [0, 1], [0, 1]),
           }}
         >
           <div
@@ -54,6 +70,7 @@ export const IntroScene: FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               position: 'relative',
+              transform: `scale(${interpolate(orbScale, [0, 1], [0.9, 1])})`,
             }}
           >
             <div

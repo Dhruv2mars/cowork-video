@@ -1,6 +1,7 @@
 import type {FC} from 'react';
-import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {colors} from '../design/theme';
+import {easeProgress, springProgress} from '../utils/motion';
 
 const nodes = [
   {id: 'core', x: 0.5, y: 0.5, r: 58},
@@ -22,26 +23,35 @@ const links = [
 type NodeGraphProps = {
   width: number;
   height: number;
-  delay?: number;
+  delaySeconds?: number;
 };
 
 export const NodeGraph: FC<NodeGraphProps> = ({
   width,
   height,
-  delay = 0,
+  delaySeconds = 0,
 }) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
 
-  const progress = spring({frame: frame - delay, fps, config: {damping: 200}});
-  const lineProgress = interpolate(progress, [0, 1], [0, 1], {
-    extrapolateRight: 'clamp',
+  const progress = springProgress({
+    frame,
+    fps,
+    delaySeconds,
+    durationSeconds: 0.9,
+    config: {damping: 200},
+  });
+  const lineProgress = easeProgress({
+    frame,
+    fps,
+    delaySeconds: delaySeconds + 0.1,
+    durationSeconds: 0.9,
   });
 
   const nodePulse = (index: number) =>
     1 +
-    Math.sin((frame + index * 12) / (fps * 1.4)) * 0.04 +
-    Math.sin((frame + index * 22) / (fps * 0.8)) * 0.02;
+    Math.sin((frame / fps + index * 0.15) * (Math.PI * 2) * 0.5) * 0.035 +
+    Math.sin((frame / fps + index * 0.22) * (Math.PI * 2) * 0.9) * 0.02;
 
   const getNode = (id: string) => nodes.find((node) => node.id === id)!;
 
@@ -74,12 +84,12 @@ export const NodeGraph: FC<NodeGraphProps> = ({
             strokeWidth={2}
             strokeDasharray={length}
             strokeDashoffset={dashOffset}
-            opacity={0.7}
+            opacity={0.15 + lineProgress * 0.65}
           />
         );
       })}
       {nodes.map((node, index) => {
-        const scale = nodePulse(index) * interpolate(progress, [0, 1], [0.8, 1]);
+        const scale = nodePulse(index) * interpolate(progress, [0, 1], [0.82, 1]);
         const x = node.x * width;
         const y = node.y * height;
         const r = node.r * scale;

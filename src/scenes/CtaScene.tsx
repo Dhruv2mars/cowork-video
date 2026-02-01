@@ -22,7 +22,7 @@ export const CtaScene: FC = () => {
               Claude Cowork
             </div>
           </AnimatedText>
-          <AnimatedText delay={8}>
+          <AnimatedText delaySeconds={0.25}>
             <div
               style={{
                 marginTop: 20,
@@ -34,7 +34,7 @@ export const CtaScene: FC = () => {
               Research preview · Available on Pro or Max
             </div>
           </AnimatedText>
-          <AnimatedText delay={14}>
+          <AnimatedText delaySeconds={0.45}>
             <div
               style={{
                 marginTop: 34,

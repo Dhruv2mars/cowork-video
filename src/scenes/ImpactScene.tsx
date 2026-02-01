@@ -1,44 +1,30 @@
 import type {FC} from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {SceneShell} from '../components/SceneShell';
+import {TitleStack} from '../components/TitleStack';
 import {colors, layout, radii} from '../design/theme';
-import {fonts, typeScale} from '../design/typography';
+import {springProgress} from '../utils/motion';
 
 export const ImpactScene: FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const progress = interpolate(frame, [0, 2 * fps, 6 * fps], [0, 0.6, 1], {
-    extrapolateRight: 'clamp',
+  const progress = springProgress({
+    frame,
+    fps,
+    durationSeconds: 1.6,
+    config: {damping: 200},
   });
 
   return (
     <SceneShell variant="dark">
       <AbsoluteFill style={{padding: layout.gutter}}>
-        <div
-          style={{
-            fontFamily: fonts.display,
-            fontSize: typeScale.h1,
-            fontWeight: 600,
-            lineHeight: 1.05,
-            color: colors.white,
-            maxWidth: 900,
-          }}
-        >
-          Parallel agents. One outcome.
-        </div>
-        <div
-          style={{
-            marginTop: 24,
-            fontFamily: fonts.body,
-            fontSize: typeScale.bodyLg,
-            fontWeight: 500,
-            color: 'rgba(255,255,255,0.72)',
-            maxWidth: 720,
-          }}
-        >
-          Fewer handoffs. More shipping. Stay in flow while Claude Cowork
-          coordinates the work.
-        </div>
+        <TitleStack
+          kicker="Impact"
+          headline="Parallel agents. One outcome."
+          subhead="Fewer handoffs. More shipping. Stay in flow while Claude Cowork coordinates the work."
+          maxWidth={900}
+          tone="dark"
+        />
         <div
           style={{
             position: 'absolute',
@@ -51,7 +37,17 @@ export const ImpactScene: FC = () => {
           }}
         >
           {[0, 1, 2, 3, 4].map((index) => {
-            const barHeight = Math.min(100, 40 + index * 12 + progress * 30);
+            const barProgress = springProgress({
+              frame,
+              fps,
+              delaySeconds: 0.2 + index * 0.12,
+              durationSeconds: 1.1,
+              config: {damping: 200},
+            });
+            const barHeight = Math.min(
+              100,
+              42 + index * 12 + interpolate(barProgress, [0, 1], [0, 34])
+            );
             return (
               <div
                 key={index}
@@ -62,6 +58,7 @@ export const ImpactScene: FC = () => {
                   display: 'flex',
                   alignItems: 'flex-end',
                   overflow: 'hidden',
+                  opacity: 0.5 + barProgress * 0.5,
                 }}
               >
                 <div
@@ -75,6 +72,19 @@ export const ImpactScene: FC = () => {
               </div>
             );
           })}
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            right: layout.gutter,
+            bottom: 120,
+            fontSize: 16,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.6)',
+          }}
+        >
+          Velocity index
         </div>
       </AbsoluteFill>
     </SceneShell>

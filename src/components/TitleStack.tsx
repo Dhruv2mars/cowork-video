@@ -9,7 +9,7 @@ type TitleStackProps = {
   subhead?: ReactNode;
   align?: 'left' | 'center';
   maxWidth?: number;
-  delay?: number;
+  delaySeconds?: number;
   tone?: 'light' | 'dark';
 };
 
@@ -19,7 +19,7 @@ export const TitleStack: FC<TitleStackProps> = ({
   subhead,
   align = 'left',
   maxWidth = 860,
-  delay = 0,
+  delaySeconds = 0,
   tone = 'light',
 }) => {
   const color = tone === 'dark' ? colors.white : colors.ink;
@@ -38,7 +38,7 @@ export const TitleStack: FC<TitleStackProps> = ({
       }}
     >
       {kicker ? (
-        <AnimatedText delay={delay}>
+        <AnimatedText delaySeconds={delaySeconds}>
           <div
             style={{
               fontFamily: fonts.body,
@@ -53,7 +53,7 @@ export const TitleStack: FC<TitleStackProps> = ({
           </div>
         </AnimatedText>
       ) : null}
-      <AnimatedText delay={delay + 6}>
+      <AnimatedText delaySeconds={delaySeconds + 0.2}>
         <div
           style={{
             fontFamily: fonts.display,
@@ -67,7 +67,7 @@ export const TitleStack: FC<TitleStackProps> = ({
         </div>
       </AnimatedText>
       {subhead ? (
-        <AnimatedText delay={delay + 12}>
+        <AnimatedText delaySeconds={delaySeconds + 0.4}>
           <div
             style={{
               fontFamily: fonts.body,

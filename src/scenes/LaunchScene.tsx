@@ -4,12 +4,24 @@ import {SceneShell} from '../components/SceneShell';
 import {AnimatedText} from '../components/AnimatedText';
 import {colors, layout, radii, shadows} from '../design/theme';
 import {fonts, typeScale} from '../design/typography';
+import {easeProgress, springProgress} from '../utils/motion';
 
 export const LaunchScene: FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const shimmer = interpolate(frame, [0, 120], [0, 1], {
-    extrapolateRight: 'clamp',
+  const reveal = springProgress({
+    frame,
+    fps,
+    durationSeconds: 0.9,
+    config: {damping: 180},
+  });
+  const shimmerPulse = 0.65 + Math.sin((frame / fps) * (Math.PI * 2) * 0.25) * 0.2;
+  const shimmer = shimmerPulse * reveal;
+  const cardFloat = easeProgress({
+    frame,
+    fps,
+    delaySeconds: 0.15,
+    durationSeconds: 0.9,
   });
 
   return (
@@ -28,7 +40,7 @@ export const LaunchScene: FC = () => {
             Claude Cowork
           </div>
         </AnimatedText>
-        <AnimatedText delay={8}>
+        <AnimatedText delaySeconds={0.25}>
           <div
             style={{
               marginTop: 24,
@@ -52,6 +64,8 @@ export const LaunchScene: FC = () => {
             background: colors.white,
             boxShadow: shadows.strong,
             overflow: 'hidden',
+            transform: `translateY(${interpolate(cardFloat, [0, 1], [22, 0])}px)`,
+            opacity: interpolate(cardFloat, [0, 1], [0, 1]),
           }}
         >
           <div
